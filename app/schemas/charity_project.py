@@ -26,7 +26,9 @@ class CharityProjectCreate(CharityProjectBase):
     Схема для создания нового благотворительного проекта.
 
     Attributes:
-        name (str): Имя переговорной комнаты.
+        name (str): Имя проекта.
+        description (str): Описание проекта.
+        full_amount (PositiveInt): Сумма взноса.
     """
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(..., min_length=1)
@@ -61,6 +63,6 @@ class CharityProjectDB(CharityProjectCreate):
     invested_amount: int
     fully_invested: bool
     create_date: datetime
-    close_date: datetime | None = None
+    close_date: datetime | None
 
     model_config = ConfigDict(from_attributes=True)
