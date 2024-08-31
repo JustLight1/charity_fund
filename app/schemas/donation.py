@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, PositiveInt
 
 class DonationBase(BaseModel):
     """
-    Базовая модель для пожертвования.
+    Базовая схема для пожертвования.
 
     Attributes:
         full_amount (int): Сумма пожертвования.
@@ -21,28 +21,25 @@ class DonationBase(BaseModel):
 
 class DonationCreate(DonationBase):
     """
-    Модель для создания пожертвования.
+    Схема для создания пожертвования.
     """
     full_amount: PositiveInt
 
 
-class DonationDBShort(DonationCreate):
+class DonationUpdate(BaseModel):
     """
-    Короткая модель пожертвования в базе данных.
+    Схема пожертвования для обновления.
+    """
+    pass
+
+
+class DonationDB(DonationCreate):
+    """
+    Схема пожертвования в базе данных.
 
     Attributes:
         id (int): Идентификатор пожертвования.
         create_date (dt.datetime): Дата создания пожертвования.
-    """
-    id: int
-    create_date: datetime
-
-
-class DonationDB(DonationDBShort):
-    """
-    Модель пожертвования в базе данных.
-
-    Attributes:
         user_id (int): ID пользователя, сделавшего пожертвование.
         invested_amount (int): Сумма, вложенная из пожертвования.
         fully_invested (bool): Флаг, указывающий, полностью ли вложено
@@ -52,6 +49,8 @@ class DonationDB(DonationDBShort):
         model_config (ConfigDict): Конфигурация схемы для сериализации объектов
         базы данных, а не только Python-словарь или JSON-объект.
     """
+    id: int
+    create_date: datetime
     user_id: int
     invested_amount: int
     fully_invested: bool
