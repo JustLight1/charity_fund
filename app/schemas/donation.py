@@ -26,20 +26,27 @@ class DonationCreate(DonationBase):
     full_amount: PositiveInt
 
 
-class DonationUpdate(BaseModel):
+class DonationDBShort(DonationBase):
     """
-    Схема пожертвования для обновления.
+    Схема пожертвования для юзера.
+
+    Attributes:
+        full_amount (int): Сумма пожертвования.
+        comment (str or None): Комментарий к пожертвованию.
+        id (int): Идентификатор пожертвования.
+        create_date (datetime): Дата создания пожертвования.
     """
-    pass
+    full_amount: int
+    comment: str | None
+    id: int
+    create_date: datetime
 
 
-class DonationDB(DonationCreate):
+class DonationDB(DonationDBShort):
     """
     Схема пожертвования в базе данных.
 
     Attributes:
-        id (int): Идентификатор пожертвования.
-        create_date (dt.datetime): Дата создания пожертвования.
         user_id (int): ID пользователя, сделавшего пожертвование.
         invested_amount (int): Сумма, вложенная из пожертвования.
         fully_invested (bool): Флаг, указывающий, полностью ли вложено
@@ -49,8 +56,6 @@ class DonationDB(DonationCreate):
         model_config (ConfigDict): Конфигурация схемы для сериализации объектов
         базы данных, а не только Python-словарь или JSON-объект.
     """
-    id: int
-    create_date: datetime
     user_id: int
     invested_amount: int
     fully_invested: bool
