@@ -17,7 +17,7 @@ class Settings(BaseSettings):
         model_config (SettingsConfigDict): Конфигурация модели.
     """
     app_title: str
-    database_url: str
+    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     secret: str = 'secret'
     first_superuser_email: EmailStr | None = None
     first_superuser_password: str | None = None
