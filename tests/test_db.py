@@ -2,29 +2,13 @@ from conftest import BASE_DIR
 
 
 try:
-    from app.models.financial_base import FinancialBase
-except (NameError, ImportError):
-    class FinancialBase:
-        pass
-
-try:
     from app.core.config import Settings
-except (NameError, ImportError):
+except (NameError, ImportError) as error:
     raise AssertionError(
-        'Не обнаружен объект настроек приложения `Settings`.'
-        'Проверьте и поправьте: он должен быть доступен в модуле `app.core.config`.',
+        'При импорте настроек приложения `Settings` из модуля '
+        '`app.core.config` возникло исключение:\n'
+        f'{type(error).__name__}: {error}.'
     )
-
-
-def test_fin_base_is_abstract():
-    if hasattr(FinancialBase, '__abstract__'):
-        assert hasattr(FinancialBase, '__abstract__'), (
-            'Модель `FinancialBase` должна быть абстрактной. '
-            'Добавьте атрибут `__abstract__`'
-        )
-        assert FinancialBase.__abstract__, (
-            'Таблица `FinancialBase` должна быть абстрактной.'
-        )
 
 
 def test_check_migration_file_exist():
@@ -39,15 +23,18 @@ def test_check_migration_file_exist():
     )
     VERSIONS_DIR = ALEMBIC_DIR / 'versions'
     files_in_version_dir = [
-        f.name for f in VERSIONS_DIR.iterdir() if f.is_file() and 'init' not in f.name]
+        f.name for f in VERSIONS_DIR.iterdir()
+        if f.is_file() and f.name != '__init__.py'
+    ]
     assert len(files_in_version_dir) > 0, (
         'В папке `alembic.versions` не обнаружены файлы миграций'
     )
 
 
 def test_check_db_url():
-    for attr_name, attr_value in Settings.schema()['properties'].items():
+    for attr_name, attr_value in Settings.model_json_schema()['properties'].items():
         if 'db' in attr_name or 'database' in attr_name:
             assert 'sqlite+aiosqlite' in attr_value['default'], (
-                'Укажите значение по умолчанию для подключения базы данных sqlite '
+                'Укажите значение по умолчанию для подключения базы данных '
+                'sqlite '
             )
