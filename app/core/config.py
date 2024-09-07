@@ -21,6 +21,18 @@ class Settings(BaseSettings):
     secret: str = 'secret'
     first_superuser_email: EmailStr | None = None
     first_superuser_password: str | None = None
+    type: str | None = None
+    project_id: str | None = None
+    private_key_id: str | None = None
+    private_key: str | None = None
+    client_email: str | None = None
+    client_id: str | None = None
+    auth_uri: str | None = None
+    token_uri: str | None = None
+    auth_provider_x509_cert_url: str | None = None
+    client_x509_cert_url: str | None = None
+    universe_domain: str | None = None
+    email: str | None = None
 
     model_config = SettingsConfigDict(env_file='.env')
 
