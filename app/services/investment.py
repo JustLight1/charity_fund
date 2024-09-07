@@ -54,13 +54,11 @@ async def investment(session: AsyncSession) -> None:
             donation.close_date = datetime.now(timezone.utc)
             donation_index += 1
 
-        # Если ни проект, ни пожертвование не закрыты, продолжаем с текущими
-        if available_project_amount > available_donation_amount:
-            donation_index += 1
-        elif available_project_amount < available_donation_amount:
+        if available_project_amount == 0:
             project_index += 1
+        elif available_donation_amount == 0:
+            donation_index += 1
         else:
-            project_index += 1
-            donation_index += 1
+            continue
 
     await session.commit()
